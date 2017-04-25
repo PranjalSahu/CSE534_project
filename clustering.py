@@ -87,7 +87,7 @@ def create_distance_matrix(features, inweight, outweight, allweight):
 features = extract_features()
 #features = features[0:5]
 
-inweight = 0; outweight = 0.0; allweight = 1.0
+inweight = 1; outweight = 0.0; allweight = 0.0
 #cluster(features)
 distMat = create_distance_matrix(features, inweight, outweight, allweight)
 #distArray = ssd.squareform(distMat)

@@ -24,6 +24,7 @@ def extract_features():
           textfeatures.append(text)
           
     allFeatures = []
+    len_array   = []
     for feat in textfeatures:
         eachThreeSet = feat.split('\n')
         
@@ -32,11 +33,20 @@ def extract_features():
             inoutall = threeSet.split(',')
             vals = [int(x) for x in inoutall]
             atomicFlow.append(vals)
+        len_array.append(len(atomicFlow[2]))
+
         atomicFlow.append(names[nameCounter])
         allFeatures.append(atomicFlow)
         nameCounter += 1
-            
-    return allFeatures
+    len_array.sort()
+    median_value       = len_array[len(len_array)/2]
+    three_fourth_value = len_array[len(len_array)/2:(len(len_array)*3)/4]
+
+    all_features_filtered = []
+    for feature in  allFeatures:
+        if len(feature[3]) >= median_value and len(feature[3]) <= three_fourth_value:
+            all_features_filtered.append(feature)
+    return all_features_filtered
 
 
 def get_dtw_distance(flow1, flow2):

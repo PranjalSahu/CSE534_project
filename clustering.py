@@ -52,7 +52,7 @@ def extract_features():
             all_features_filtered.append(feature)
             all_features_filtered_type.append(mean_hash[feature_type_array[index]])
         index = index+1
-    return [all_features_filtered, all_features_filtered_type, feature_type_array]
+    return all_features_filtered
 
 
 def get_dtw_distance(flow1, flow2):

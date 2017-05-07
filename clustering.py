@@ -44,12 +44,10 @@ def extract_features():
         atomicFlow.append(names[nameCounter])
         allFeatures.append(atomicFlow)
         nameCounter += 1
-
     all_keys  = len_hash.keys()
     mean_hash = {}
     for key in all_keys:
         mean_hash[key] = sum(len_hash[key])/len(len_hash[key])
-
     all_features_filtered = []
     index = 0
     for feature in  allFeatures:

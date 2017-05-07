@@ -5,6 +5,7 @@ import pcapy
 import pcap
 from shutil import copyfile
 import shutil
+from random import randint
 
 events = ['open_user_profile', 'send_message', 'post_on_wall']
 
@@ -21,9 +22,9 @@ def get_flow_time(inputfile):
 	r = f.read()
 	r = r.split("\n")
 	l = r[0].split(":")[0]
-	start_time = float(l)
-	
+	start_time  = float(l)
 	event_times = []
+	start_int   = randint(0, 100000)
 	global events
 	for line in r:
 		for event in events:
@@ -31,7 +32,8 @@ def get_flow_time(inputfile):
 				p = line.split(":")
 				p = p[0]
 				p = float(p)
-				event_times.append([event, p-start_time])
+				event_times.append([event, p-start_time, start_int])
+				start_int = start_int + 1
 	return event_times
 
 
@@ -55,12 +57,12 @@ if __name__ == '__main__':
 		t = "tshark -r "+filename+" -Y "+"\"(tcp.stream eq "+str(i)+" )\""+" -w "+"./flows/"+str(i)+".pcap"
 		print(t)
 		os.system(t)
-
 	event_times = get_flow_time(inputfile)
 
 	[start_time, end_time] = get_time('./flows/0.pcap')
 
 	arr = []
+	arr_event_id = []
 	for i in range(0, n):
 		f = './flows/'+str(i)+'.pcap'
 		
@@ -75,12 +77,18 @@ if __name__ == '__main__':
 		for event in event_times:
 			if not((et < event[1]) or (st > event[1]+event_sec)):
 				flag_event = event[0]
+				event_id   = event[2]
 				break
 		arr.append(str(i)+" "+flag_event)
+		arr_event_id.append(str(i)+" "+str(event_id))
 
 	s = '\n'.join(arr)
-
 	f = open('output', 'w')
+	f.write(s)
+	f.close()
+
+	s = '\n'.join(arr_event_id)
+	f = open('output_event_ids', 'w')
 	f.write(s)
 	f.close()
 

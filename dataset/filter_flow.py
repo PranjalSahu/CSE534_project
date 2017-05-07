@@ -17,7 +17,6 @@ def make_folder(path):
 if __name__ == '__main__':
 	all_files   = glob.glob("./domain/*.pcap")
 	make_folder('./filter')
-
 	for filename in all_files:
 		print("processing flow "+filename)
 		dst = filename.split("/")[2]

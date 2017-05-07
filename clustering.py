@@ -100,13 +100,13 @@ def create_distance_matrix(features, inweight, outweight, allweight):
 
 def get_labels():
     labels = {}
-    with open('dataset/output') as f:
-        content = f.read().splitlines()
-    
-    for entry in content:
-        entry = entry.split(' ');   
-        labels[int(entry[0])] = entry[1]
-    
+    names = [os.path.basename(x) for x in glob.glob('./dataset/feature/*')]
+    files = glob.glob("./dataset/feature/*")
+    for fle in files:
+        with open(fle) as f:
+            text = f.read()
+            feature_type = text.split('\n')[3]
+            labels[fle] = feature_type
     return labels
    
 def get_cluster_purity(labels, features, fl, numclusters):

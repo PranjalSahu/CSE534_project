@@ -62,9 +62,9 @@ def extract_features():
 def get_dtw_distance(flow1, flow2):
     x = np.array(flow1)
     y = np.array(flow2)
-    distance, path = fastdtw(x, y, dist=euclidean)
+#    distance, path = fastdtw(x, y, dist=None)
     
-    return distance
+    return abs(len(x) - len(y))
 
 def create_distance_matrix(features, inweight, outweight, allweight):
     nsamples = len(features)
@@ -132,7 +132,7 @@ features = extract_features()
 
 inweight = 0; outweight = 0.5; allweight = 0.5
 #cluster(features)
-distMat = create_distance_matrix(features, inweight, outweight, allweight)
+distMat = create_distance_matrix(features, 0, 0, 1)
 #distArray = ssd.squareform(distMat)
 distArray = distMat[np.triu_indices(len(features),1)]
 

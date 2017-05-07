@@ -137,26 +137,26 @@ purity = get_cluster_purity(get_labels(), features, fl, 3)
 plt.figure(figsize=(10, 10))
 
 
-#0th: incoming packets; 1st: outgoing packets; 2nd: incoming + outgoing
-features = extract_features()
-#features = features[0:5]
-
-inweight = 1; outweight = 0.0; allweight = 0.0
-#cluster(features)
-distMat = create_distance_matrix(features, inweight, outweight, allweight)
-#distArray = ssd.squareform(distMat)
-distArray = distMat[np.triu_indices(len(features),1)]
-
-Z = linkage(distArray, method='average')
-
-#plot dendogram
-plt.figure(figsize=(10, 10))
-plt.title('Hierarchical Clustering Dendrogram')
-plt.xlabel('sample index')
-plt.ylabel('distance')
-dendrogram(
-    Z,
-    leaf_rotation=90.,  # rotates the x axis labels
-    leaf_font_size=8.,  # font size for the x axis labels
-)
-plt.show()
+##0th: incoming packets; 1st: outgoing packets; 2nd: incoming + outgoing
+#features = extract_features()
+##features = features[0:5]
+#
+#inweight = 1; outweight = 0.0; allweight = 0.0
+##cluster(features)
+#distMat = create_distance_matrix(features, inweight, outweight, allweight)
+##distArray = ssd.squareform(distMat)
+#distArray = distMat[np.triu_indices(len(features),1)]
+#
+#Z = linkage(distArray, method='average')
+#
+##plot dendogram
+#plt.figure(figsize=(10, 10))
+#plt.title('Hierarchical Clustering Dendrogram')
+#plt.xlabel('sample index')
+#plt.ylabel('distance')
+#dendrogram(
+#    Z,
+#    leaf_rotation=90.,  # rotates the x axis labels
+#    leaf_font_size=8.,  # font size for the x axis labels
+#)
+#plt.show()

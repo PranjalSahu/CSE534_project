@@ -74,6 +74,7 @@ if __name__ == '__main__':
 		#if t >= event[1] and t <= event[1]+event_sec:
 
 		flag_event = 'garbage'
+		event_id   = 0 
 		for event in event_times:
 			if not((et < event[1]) or (st > event[1]+event_sec)):
 				flag_event = event[0]

@@ -104,8 +104,10 @@ def get_cluster_purity(labels, features, fl, numclusters):
     
     for clusteridx in clusteridxs:
         cluster1total = 0; cluster2total = 0; cluster3total = 0
+        print '---------------------------------------'
         for idx in clusteridx:
-            actualcluster = labels[idx]
+            actualcluster = labels[int(features[idx][3])]
+            print actualcluster
             if actualcluster == 'post_on_wall':
                 cluster1total += 1
             elif actualcluster == 'send_message':
@@ -124,7 +126,7 @@ def get_cluster_purity(labels, features, fl, numclusters):
 features = extract_features()
 #features = features[0:5]
 
-inweight = 0; outweight = 0; allweight = 1.0
+inweight = 0; outweight = 0.5; allweight = 0.5
 #cluster(features)
 distMat = create_distance_matrix(features, inweight, outweight, allweight)
 #distArray = ssd.squareform(distMat)
@@ -139,19 +141,6 @@ purity = get_cluster_purity(get_labels(), features, fl, 3)
              
 #plot dendogram
 plt.figure(figsize=(10, 10))
-
-
-#0th: incoming packets; 1st: outgoing packets; 2nd: incoming + outgoing
-features = extract_features()
-#features = features[0:5]
-
-inweight = 1; outweight = 0.0; allweight = 0.0
-#cluster(features)
-distMat = create_distance_matrix(features, inweight, outweight, allweight)
-#distArray = ssd.squareform(distMat)
-distArray = distMat[np.triu_indices(len(features),1)]
-
-Z = linkage(distArray, method='average')
 
 #plot dendogram
 plt.figure(figsize=(10, 10))

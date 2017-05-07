@@ -1,0 +1,112 @@
+1494123410.86 : emulator starts for iteration 10
+1494123417.63 : open_facebook starts
+1494123418.38 : open_facebook ends
+1494123428.38 : post_on_wall starts
+1494123447.09 : post_on_wall ends
+1494123464.1 : open_facebook starts
+1494123464.85 : open_facebook ends
+1494123474.86 : open_user_profile starts
+1494123492.99 : open_user_profile ends
+1494123509.74 : open_facebook starts
+1494123510.43 : open_facebook ends
+1494123520.45 : send_message starts
+1494123558.51 : send_message ends
+1494123568.52 :emulator close for iteration 10
+1494123568.52 : emulator starts for iteration 11
+1494123575.4 : open_facebook starts
+1494123576.06 : open_facebook ends
+1494123586.08 : post_on_wall starts
+1494123602.55 : post_on_wall ends
+1494123619.44 : open_facebook starts
+1494123620.15 : open_facebook ends
+1494123630.16 : open_user_profile starts
+1494123648.76 : open_user_profile ends
+1494123665.74 : open_facebook starts
+1494123666.38 : open_facebook ends
+1494123676.39 : send_message starts
+1494123718.64 : send_message ends
+1494123728.65 :emulator close for iteration 11
+1494123728.65 : emulator starts for iteration 12
+1494123735.43 : open_facebook starts
+1494123736.19 : open_facebook ends
+1494123746.2 : post_on_wall starts
+1494123762.99 : post_on_wall ends
+1494123779.75 : open_facebook starts
+1494123780.42 : open_facebook ends
+1494123790.42 : open_user_profile starts
+1494123808.57 : open_user_profile ends
+1494123825.56 : open_facebook starts
+1494123826.3 : open_facebook ends
+1494123836.31 : send_message starts
+1494123861.66 : send_message ends
+1494123871.67 :emulator close for iteration 12
+1494123871.67 : emulator starts for iteration 13
+1494123878.42 : open_facebook starts
+1494123879.07 : open_facebook ends
+1494123889.08 : post_on_wall starts
+1494123905.9 : post_on_wall ends
+1494123922.93 : open_facebook starts
+1494123923.65 : open_facebook ends
+1494123933.67 : open_user_profile starts
+1494123951.89 : open_user_profile ends
+1494123968.67 : open_facebook starts
+1494123969.32 : open_facebook ends
+1494123979.32 : send_message starts
+1494124015.51 : send_message ends
+1494124025.52 :emulator close for iteration 13
+1494124025.53 : emulator starts for iteration 14
+1494124032.38 : open_facebook starts
+1494124033.05 : open_facebook ends
+1494124043.06 : post_on_wall starts
+1494124060.66 : post_on_wall ends
+1494124077.7 : open_facebook starts
+1494124078.42 : open_facebook ends
+1494124088.42 : open_user_profile starts
+1494124107.22 : open_user_profile ends
+1494124124.05 : open_facebook starts
+1494124124.79 : open_facebook ends
+1494124134.79 : send_message starts
+1494124160.7 : send_message ends
+1494124170.71 :emulator close for iteration 14
+1494124170.71 : emulator starts for iteration 15
+1494124177.62 : open_facebook starts
+1494124178.31 : open_facebook ends
+1494124188.31 : post_on_wall starts
+1494124205.74 : post_on_wall ends
+1494124223.1 : open_facebook starts
+1494124223.77 : open_facebook ends
+1494124233.78 : open_user_profile starts
+1494124252.24 : open_user_profile ends
+1494124268.96 : open_facebook starts
+1494124269.63 : open_facebook ends
+1494124279.64 : send_message starts
+1494124311.31 : send_message ends
+1494124321.33 :emulator close for iteration 15
+1494124321.33 : emulator starts for iteration 16
+1494124328.16 : open_facebook starts
+1494124328.85 : open_facebook ends
+1494124338.85 : post_on_wall starts
+1494124358.18 : post_on_wall ends
+1494124375.04 : open_facebook starts
+1494124375.73 : open_facebook ends
+1494124385.74 : open_user_profile starts
+1494124404.21 : open_user_profile ends
+1494124421.06 : open_facebook starts
+1494124421.7 : open_facebook ends
+1494124431.7 : send_message starts
+1494124463.94 : send_message ends
+1494124473.95 :emulator close for iteration 16
+1494124473.95 : emulator starts for iteration 17
+1494124480.73 : open_facebook starts
+1494124481.47 : open_facebook ends
+1494124491.48 : post_on_wall starts
+1494124508.52 : post_on_wall ends
+1494124525.2 : open_facebook starts
+1494124525.87 : open_facebook ends
+1494124535.88 : open_user_profile starts
+1494124554.12 : open_user_profile ends
+1494124570.94 : open_facebook starts
+1494124571.64 : open_facebook ends
+1494124581.64 : send_message starts
+1494124618.85 : send_message ends
+1494124628.86 :emulator close for iteration 17

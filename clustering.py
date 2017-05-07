@@ -26,28 +26,36 @@ def extract_features():
           textfeatures.append(text)
           
     allFeatures = []
-    len_array   = []
+    len_hash   = {}
+    #len_hash['post'] = []
+    feature_type_array = []
     for feat in textfeatures:
-        eachThreeSet = feat.split('\n')
-        
+        eachThreeSet = feat.split('\n')[0:3]
+        feature_type = feat.split('\n')[3]
+        if feature_type not in len_hash:
+            len_hash[feature_type] = []
+        feature_type_array.append(feature_type)
         atomicFlow = []
         for threeSet in eachThreeSet:
             inoutall = threeSet.split(',')
             vals = [int(x) for x in inoutall]
             atomicFlow.append(vals)
-        len_array.append(len(atomicFlow[2]))
-
+        len_hash[feature_type].append(len(atomicFlow[2]))
         atomicFlow.append(names[nameCounter])
         allFeatures.append(atomicFlow)
         nameCounter += 1
-    len_array.sort()
-    median_value       = len_array[len(len_array)/2]
-    three_fourth_value = len_array[len(len_array)/2:(len(len_array)*3)/4]
+
+    all_keys  = len_hash.keys()
+    mean_hash = {}
+    for key in all_keys:
+        mean_hash[key] = sum(len_hash[key])/len(len_hash[key])
 
     all_features_filtered = []
+    index = 0
     for feature in  allFeatures:
-        if len(feature[3]) >= median_value and len(feature[3]) <= three_fourth_value:
+        if len(feature[2]) >= mean_hash[feature_type_array[index]]:
             all_features_filtered.append(feature)
+        index = index+1
     return all_features_filtered
 
 

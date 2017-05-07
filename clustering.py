@@ -30,7 +30,7 @@ import os
 
 def extract_features():
     textfeatures = []
-    names = [os.path.basename(x) for x in glob.glob('./dataset/feature/*')]
+#    names = [os.path.basename(x) for x in glob.glob('./dataset/feature/*')]
     files = glob.glob("./dataset/feature/*")
     nameCounter = 0
     for fle in files:
@@ -52,32 +52,38 @@ def extract_features():
             vals = [int(x) for x in inoutall]
             atomicFlow.append(vals)
         len_hash[feature_type].append(len(atomicFlow[2]))
-        atomicFlow.append(names[nameCounter])
+#        atomicFlow.append(names[nameCounter])
+        atomicFlow.append(feature_type)
         allFeatures.append(atomicFlow)
         nameCounter += 1
     all_keys  = len_hash.keys()
     mean_hash = {}
+    max_hash  = {}
     for key in all_keys:
         mean_hash[key] = sum(len_hash[key])/len(len_hash[key])
+        len_hash[key].sort()
+        max_hash[key]  = len_hash[key][(len(len_hash[key])*9)/10]
     all_features_filtered = []
     all_features_filtered_type = []
     index = 0
     for feature in  allFeatures:
-        if len(feature[2]) >= mean_hash[feature_type_array[index]] and len(features[2]) <= (mean_hash[feature_type_array[index]]*9)/10:
+        if len(feature[2]) >= mean_hash[feature_type_array[index]] and len(feature[2]) <= max_hash[feature_type_array[index]]:
             all_features_filtered.append(feature)
             all_features_filtered_type.append(mean_hash[feature_type_array[index]])
         index = index+1
     return all_features_filtered
 
 
+
 def get_dtw_distance(flow1, flow2):
     x = np.array(flow1)
     y = np.array(flow2)
-#    distance, path = fastdtw(x, y, dist=None)
+    distance, path = fastdtw(x, y, dist=euclidean)
     
-    return abs(len(x) - len(y))
+    flow_length_distance =  abs(len(x) - len(y))
+    return flow_length_distance + distance * 0.001
 
-def create_distance_matrix(features, inweight, outweight, allweight):
+def create_distance_matrix(features, outweight, inweight, allweight):
     nsamples = len(features)
     
     distMat = np.zeros((nsamples, nsamples))
@@ -86,8 +92,8 @@ def create_distance_matrix(features, inweight, outweight, allweight):
         print(i)
         for j in range(0,nsamples):
             
-            inDist = get_dtw_distance(features[i][0], features[j][0])
-            outDist = get_dtw_distance(features[i][1], features[j][1])
+            outDist = get_dtw_distance(features[i][0], features[j][0])
+            inDist = get_dtw_distance(features[i][1], features[j][1])
             allDist = get_dtw_distance(features[i][2], features[j][2])
             
             netDistance = inweight * inDist + outweight * outDist + allweight * allDist
@@ -95,18 +101,7 @@ def create_distance_matrix(features, inweight, outweight, allweight):
     print(distMat)
     return distMat
 
-def get_labels():
-    labels = {}
-    with open('dataset/output') as f:
-        content = f.read().splitlines()
-    
-    for entry in content:
-        entry = entry.split(' ');   
-        labels[int(entry[0])] = entry[1]
-    
-    return labels
-   
-def get_cluster_purity(labels, features, fl, numclusters):
+def get_cluster_purity(features, fl, numclusters):
     
     #1: post_on_wall 2:send_message 3:open_user_profile
     cluster1total = 0; cluster2total = 0; cluster3total = 0
@@ -121,7 +116,7 @@ def get_cluster_purity(labels, features, fl, numclusters):
         cluster1total = 0; cluster2total = 0; cluster3total = 0
         print '---------------------------------------'
         for idx in clusteridx:
-            actualcluster = labels[int(features[idx][3])]
+            actualcluster = features[idx][3]
             print actualcluster
             if actualcluster == 'post_on_wall':
                 cluster1total += 1
@@ -141,9 +136,9 @@ def get_cluster_purity(labels, features, fl, numclusters):
 features = extract_features()
 #features = features[0:5]
 
-inweight = 0; outweight = 0.5; allweight = 0.5
+inweight = 0.5; outweight = 0.3; allweight = 0.5
 #cluster(features)
-distMat = create_distance_matrix(features, 0, 0, 1)
+distMat = create_distance_matrix(features, outweight, inweight, allweight)
 #distArray = ssd.squareform(distMat)
 distArray = distMat[np.triu_indices(len(features),1)]
 
@@ -152,7 +147,7 @@ Z = linkage(distArray, method='average')
 #create three clusters
 fl = fcluster(Z,3,criterion='maxclust');
 
-purity = get_cluster_purity(get_labels(), features, fl, 3)
+purity = get_cluster_purity(features, fl, 3)
              
 #plot dendogram
 plt.figure(figsize=(10, 10))

@@ -35,6 +35,17 @@ def get_event_names():
 		h[a] = b
 	return h
 
+def get_event_ids():
+	f = open('output_event_ids', 'r')
+	r = f.read()
+	r = r.split("\n")
+	h = {}
+	for line in r:
+		a = line.split(" ")[0]
+		b = line.split(" ")[1]
+		h[a] = b
+	return h
+
 def get_valid_events():
 	f = open('output', 'r')
 	r = f.read()
@@ -56,6 +67,7 @@ if __name__ == '__main__':
 
 	valid_events = get_valid_events()
 	event_name_hash = get_event_names()
+	event_id_hash   = get_event_ids()
 	print(valid_events)
 
 	events = ['open_user_profile', 'send_message', 'post_on_wall']
@@ -89,7 +101,7 @@ if __name__ == '__main__':
 			strb = ",".join(dest_packets)
 			strc = ",".join(total_packets)
 
-			p = stra+"\n"+strb+"\n"+strc+"\n"+event_name_hash[dst]
+			p = stra+"\n"+strb+"\n"+strc+"\n"+event_name_hash[dst]+"\n"+event_id_hash[dst]
 
 			if len(total_packets) >= 8:
 				fp = open('./feature/'+dst, 'w')

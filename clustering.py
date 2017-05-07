@@ -13,20 +13,20 @@ from scipy.cluster.hierarchy import fcluster
 from matplotlib import pyplot as plt
 import os
 
-# def DTWDistance(s, t):
-#    dtw = numpy.zeros((len(s), len(t)))
-#    for i in range(0, len(s))
-#        dtw[i, 0] := 1000000
-#    for i := 1 to m
-#        DTW[0, i] := infinity
-#    DTW[0, 0] := 0
-#    for i := 1 to n
-#        for j := 1 to m
-#            cost := d(s[i], t[j])
-#            DTW[i, j] := cost + minimum(DTW[i-1, j  ],    // insertion
-#                                        DTW[i  , j-1],    // deletion
-#                                        DTW[i-1, j-1])    // match
-#    return DTW[n, m]
+def DTWDistance(s, t):
+    n = len(s)
+    m = len(t)
+    dtw = numpy.zeros(n, m)
+    for i in range(0, len(s)):
+        dtw[i, 0] = 1000000
+    for i in range(0, len(t)):
+        dtw[0, i] = 1000000
+    dtw[0, 0] = 0
+    for i in range(1, n):
+        for j in range(1, m):
+            cost = abs(s[i] - t[j])
+            dtw[i, j] = cost + minimum( dtw[i-1, j], dtw[i  , j-1], dtw[i-1, j-1])
+   return dtw[n-1, m-1]
 
 def extract_features():
     textfeatures = []
@@ -101,8 +101,8 @@ def create_distance_matrix(features, outweight, inweight, allweight):
     print(distMat)
     return distMat
 
-def get_cluster_purity(features, fl, numclusters):
-    
+   
+def get_cluster_purity(labels, features, fl, numclusters):    
     #1: post_on_wall 2:send_message 3:open_user_profile
     cluster1total = 0; cluster2total = 0; cluster3total = 0
     clusterlengths = []; maxvotes = []

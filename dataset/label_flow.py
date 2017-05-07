@@ -31,7 +31,6 @@ if __name__ == '__main__':
 	facebook_ips = ['31.13.71.7', '31.13.71.1', '31.13.69.195']
 	
 	make_folder("./domain")
-
 	for filename in all_files:
 		reader = pcapy.open_offline(filename)
 		(header, payload) = reader.next()

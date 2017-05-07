@@ -13,20 +13,20 @@ from scipy.cluster.hierarchy import fcluster
 from matplotlib import pyplot as plt
 import os
 
-# def DTWDistance(s, t):
-#    dtw = numpy.zeros((len(s), len(t)))
-#    for i in range(0, len(s))
-#        dtw[i, 0] := 1000000
-#    for i := 1 to m
-#        DTW[0, i] := infinity
-#    DTW[0, 0] := 0
-#    for i := 1 to n
-#        for j := 1 to m
-#            cost := d(s[i], t[j])
-#            DTW[i, j] := cost + minimum(DTW[i-1, j  ],    // insertion
-#                                        DTW[i  , j-1],    // deletion
-#                                        DTW[i-1, j-1])    // match
-#    return DTW[n, m]
+def DTWDistance(s, t):
+    n = len(s)
+    m = len(t)
+    dtw = numpy.zeros(n, m)
+    for i in range(0, len(s)):
+        dtw[i, 0] = 1000000
+    for i in range(0, len(t)):
+        dtw[0, i] = 1000000
+    dtw[0, 0] = 0
+    for i in range(1, n):
+        for j in range(1, m):
+            cost = abs(s[i] - t[j])
+            dtw[i, j] = cost + minimum( dtw[i-1, j], dtw[i  , j-1], dtw[i-1, j-1])
+   return dtw[n-1, m-1]
 
 def extract_features():
     textfeatures = []
@@ -57,13 +57,16 @@ def extract_features():
         nameCounter += 1
     all_keys  = len_hash.keys()
     mean_hash = {}
+    max_hash = {}
     for key in all_keys:
         mean_hash[key] = sum(len_hash[key])/len(len_hash[key])
+        sorted_len     = len_hash[key].sort() 
+        max_hash[key]  = sorted_len[-1]
     all_features_filtered = []
     all_features_filtered_type = []
     index = 0
     for feature in  allFeatures:
-        if len(feature[2]) >= mean_hash[feature_type_array[index]] and len(features[2]) <= (mean_hash[feature_type_array[index]]*9)/10:
+        if len(feature[2]) >= mean_hash[feature_type_array[index]] and len(features[2]) <= (max_hash[feature_type_array[index]]*9)/10:
             all_features_filtered.append(feature)
             all_features_filtered_type.append(mean_hash[feature_type_array[index]])
         index = index+1

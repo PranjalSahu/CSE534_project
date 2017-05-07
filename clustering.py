@@ -61,12 +61,12 @@ def extract_features():
     for key in all_keys:
         mean_hash[key] = sum(len_hash[key])/len(len_hash[key])
         len_hash[key].sort()
-        max_hash[key]  = len_hash[key][-1]
+        max_hash[key]  = len_hash[key][(len(len_hash[key])*9)/10]
     all_features_filtered = []
     all_features_filtered_type = []
     index = 0
     for feature in  allFeatures:
-        if len(feature[2]) >= mean_hash[feature_type_array[index]] and len(feature[2]) <= (max_hash[feature_type_array[index]]*9)/10:
+        if len(feature[2]) >= mean_hash[feature_type_array[index]] and len(feature[2]) <= max_hash[feature_type_array[index]]:
             all_features_filtered.append(feature)
             all_features_filtered_type.append(mean_hash[feature_type_array[index]])
         index = index+1

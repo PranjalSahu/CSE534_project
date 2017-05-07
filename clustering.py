@@ -13,21 +13,32 @@ from scipy.cluster.hierarchy import fcluster
 from matplotlib import pyplot as plt
 import os
 
+# def DTWDistance(s, t):
+#    dtw = numpy.zeros((len(s), len(t)))
+#    for i in range(0, len(s))
+#        dtw[i, 0] := 1000000
+#    for i := 1 to m
+#        DTW[0, i] := infinity
+#    DTW[0, 0] := 0
+#    for i := 1 to n
+#        for j := 1 to m
+#            cost := d(s[i], t[j])
+#            DTW[i, j] := cost + minimum(DTW[i-1, j  ],    // insertion
+#                                        DTW[i  , j-1],    // deletion
+#                                        DTW[i-1, j-1])    // match
+#    return DTW[n, m]
+
 def extract_features():
-    textfeatures = [];
+    textfeatures = []
     names = [os.path.basename(x) for x in glob.glob('./dataset/feature/*')]
     files = glob.glob("./dataset/feature/*")
     nameCounter = 0
-    # iterate over the list getting each file 
     for fle in files:
-       # open the file and then call .read() to get the text
        with open(fle) as f:
           text = f.read()
           textfeatures.append(text)
-          
     allFeatures = []
-    len_hash   = {}
-    #len_hash['post'] = []
+    len_hash    = {}
     feature_type_array = []
     for feat in textfeatures:
         eachThreeSet = feat.split('\n')[0:3]
@@ -44,17 +55,17 @@ def extract_features():
         atomicFlow.append(names[nameCounter])
         allFeatures.append(atomicFlow)
         nameCounter += 1
-
     all_keys  = len_hash.keys()
     mean_hash = {}
     for key in all_keys:
         mean_hash[key] = sum(len_hash[key])/len(len_hash[key])
-
     all_features_filtered = []
+    all_features_filtered_type = []
     index = 0
     for feature in  allFeatures:
-        if len(feature[2]) >= mean_hash[feature_type_array[index]]:
+        if len(feature[2]) >= mean_hash[feature_type_array[index]] and len(features[2]) <= (mean_hash[feature_type_array[index]]*9)/10:
             all_features_filtered.append(feature)
+            all_features_filtered_type.append(mean_hash[feature_type_array[index]])
         index = index+1
     return all_features_filtered
 

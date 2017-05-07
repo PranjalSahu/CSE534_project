@@ -1,70 +1,136 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Apr 24 00:38:59 2017
-
+Created on Mon Apr 24 02:31:02 2017
 @author: Sushant
 """
-
-#import mlpy
-##import matplotlib.pyplot as plt
-##import matplotlib.cm as cm
-#
-#x = [0,0,0,0,1,1,2,2,3,2,1,1,0,0,0,0]
-#
-#y = [0,0,1,1,2,2,3,3,3,3,2,2,1,1,0,0]
-#
-#dist, cost, path = mlpy.dtw_std(x, y, dist_only=False)
-
-
-from math import *
 import numpy as np
-import sys
+from scipy.spatial.distance import euclidean
+from fastdtw import fastdtw
+import glob
+from scipy.cluster.hierarchy import dendrogram, linkage
+from scipy.cluster.hierarchy import fclusterdata
+from scipy.cluster.hierarchy import fcluster    
+from matplotlib import pyplot as plt
+import os
 
-def DTW(A, B, window = sys.maxint, d = lambda x,y: abs(x-y)):
-    # create the cost matrix
-    A, B = np.array(A), np.array(B)
-    M, N = len(A), len(B)
-    cost = sys.maxint * np.ones((M, N))
+def extract_features():
+    textfeatures = [];
+    names = [os.path.basename(x) for x in glob.glob('./dataset/feature/*')]
+    files = glob.glob("./dataset/feature/*")
+    nameCounter = 0
+    # iterate over the list getting each file 
+    for fle in files:
+       # open the file and then call .read() to get the text
+       with open(fle) as f:
+          text = f.read()
+          textfeatures.append(text)
+          
+    allFeatures = []
+    for feat in textfeatures:
+        eachThreeSet = feat.split('\n')
+        
+        atomicFlow = []
+        for threeSet in eachThreeSet:
+            inoutall = threeSet.split(',')
+            vals = [int(x) for x in inoutall]
+            atomicFlow.append(vals)
+        atomicFlow.append(names[nameCounter])
+        allFeatures.append(atomicFlow)
+        nameCounter += 1
+            
+    return allFeatures
 
-    # initialize the first row and column
-    cost[0, 0] = d(A[0], B[0])
-    for i in range(1, M):
-        cost[i, 0] = cost[i-1, 0] + d(A[i], B[0])
 
-    for j in range(1, N):
-        cost[0, j] = cost[0, j-1] + d(A[0], B[j])
-    # fill in the rest of the matrix
-    for i in range(1, M):
-        for j in range(max(1, i - window), min(N, i + window)):
-            choices = cost[i - 1, j - 1], cost[i, j-1], cost[i-1, j]
-            cost[i, j] = min(choices) + d(A[i], B[j])
-
-    # find the optimal path
-    n, m = N - 1, M - 1
-    path = []
-
-    while (m, n) != (0, 0):
-        path.append((m, n))
-        m, n = min((m - 1, n), (m, n - 1), (m - 1, n - 1), key = lambda x: cost[x[0], x[1]])
+def get_dtw_distance(flow1, flow2):
+    x = np.array(flow1)
+    y = np.array(flow2)
+    distance, path = fastdtw(x, y, dist=euclidean)
     
-    path.append((0,0))
-    return cost[-1, -1], path
+    return distance
 
-def main():
-    A, B = np.array([1,2,3,-4,2,3]), np.array([1,1,3,3,4,3,3])
-    C = np.array([7,8,5,9,11,9])
-    B = C
-    cost, path = DTW(A, B, window = 4)
-    print 'Total Distance is ', cost
-    import matplotlib.pyplot as plt
-    offset = 5
-    plt.xlim([-1, max(len(A), len(B)) + 1])
-    plt.plot(A)
-    plt.plot(B + offset)
-    for (x1, x2) in path:
-        plt.plot([x1, x2], [A[x1], B[x2] + offset])
-    plt.show()
-
-if __name__ == '__main__':
-    main()
+def create_distance_matrix(features, inweight, outweight, allweight):
+    nsamples = len(features)
     
+    distMat = np.zeros((nsamples, nsamples))
+    
+    for i in range(0,nsamples):
+        print(i)
+        for j in range(0,nsamples):
+            
+            inDist = get_dtw_distance(features[i][0], features[j][0])
+            outDist = get_dtw_distance(features[i][1], features[j][1])
+            allDist = get_dtw_distance(features[i][2], features[j][2])
+            
+            netDistance = inweight * inDist + outweight * outDist + allweight * allDist
+            distMat[i][j] = netDistance
+    print(distMat)
+    return distMat
+
+def get_labels():
+    labels = {}
+    with open('dataset/output') as f:
+        content = f.read().splitlines()
+    
+    for entry in content:
+        entry = entry.split(' ');   
+        labels[int(entry[0])] = entry[1]
+    
+    return labels
+   
+def get_cluster_purity(labels, features, fl, numclusters):
+    
+    #1: post_on_wall 2:send_message 3:open_user_profile
+    cluster1total = 0; cluster2total = 0; cluster3total = 0
+    clusterlengths = []; maxvotes = []
+    purity = []
+    clusteridxs = []
+    for itr in range(1,numclusters + 1):
+        clusteridx = np.where(fl == itr)[0].tolist()
+        clusteridxs.append(clusteridx)
+    
+    for clusteridx in clusteridxs:
+        cluster1total = 0; cluster2total = 0; cluster3total = 0
+        for idx in clusteridx:
+            actualcluster = labels[idx]
+            if actualcluster == 'post_on_wall':
+                cluster1total += 1
+            elif actualcluster == 'send_message':
+                cluster2total += 1
+            elif actualcluster == 'open_user_profile':
+                cluster3total += 1
+        majorityClusters = max(cluster1total, cluster2total, cluster3total)
+        currpurity = (float)(majorityClusters)/(float)(len(clusteridx))
+        clusterlengths.append(len(clusteridx))
+        maxvotes.append(majorityClusters)
+        purity.append(currpurity)
+
+    return purity
+    
+#0th: incoming packets; 1st: outgoing packets; 2nd: incoming + outgoing
+features = extract_features()
+#features = features[0:5]
+
+inweight = 0; outweight = 0; allweight = 1.0
+#cluster(features)
+distMat = create_distance_matrix(features, inweight, outweight, allweight)
+#distArray = ssd.squareform(distMat)
+distArray = distMat[np.triu_indices(len(features),1)]
+
+Z = linkage(distArray, method='average')
+
+#create three clusters
+fl = fcluster(Z,3,criterion='maxclust');
+
+purity = get_cluster_purity(get_labels(), features, fl, 3)
+             
+#plot dendogram
+plt.figure(figsize=(10, 10))
+plt.title('Hierarchical Clustering Dendrogram')
+plt.xlabel('sample index')
+plt.ylabel('distance')
+dendrogram(
+    Z,
+    leaf_rotation=90.,  # rotates the x axis labels
+    leaf_font_size=8.,  # font size for the x axis labels
+)
+plt.show()

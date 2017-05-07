@@ -85,7 +85,8 @@ def send_message():
     adb_keycode(29) 
     time.sleep(5)
     adb_touch_tap(305, 223)
-    adb_touch_tap(229, 1166)
+    time.sleep(1)
+    adb_touch_tap(427, 1127)
     time.sleep(5)
     
     write_message()
@@ -111,9 +112,9 @@ def getStatus(i):
     status = status.replace(' ', '%s')
     
     cmd ="adb shell input text %s" % ( status )
-    print cmd
+#    print cmd
     call ( cmd.split() )
-    print status
+#    print status
     
 #def post_on_other_wall():
 #    open_facebook()
@@ -134,7 +135,7 @@ def getStatus(i):
 
 
 
-for i in range(9,30):
+for i in range(18,30):
     f = open('traffic.txt', 'a')
     f.write(str(time.time()) + " : emulator starts for iteration " + str(i) + "\n")
     

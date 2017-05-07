@@ -42,11 +42,11 @@ def extract_features():
         nameCounter += 1
     len_array.sort()
     median_value       = len_array[len(len_array)/2]
-    three_fourth_value = len_array[len(len_array)/2:(len(len_array)*3)/4]
+    three_fourth_value = len_array[(len(len_array)*3)/4]
 
     all_features_filtered = []
     for feature in  allFeatures:
-        if len(feature[3]) >= median_value and len(feature[3]) <= three_fourth_value:
+        if len(feature[2]) >= median_value and len(feature[2]) <= three_fourth_value:
             all_features_filtered.append(feature)
     return all_features_filtered
 
